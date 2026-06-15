@@ -1,0 +1,1 @@
+/* Placeholder for emoji-picker.js library. Replace with the production bundle if needed. */

@@ -1,0 +1,57 @@
+/* ═══════════════════════════════════════════
+   Eisenhower Matrix Pro — Themes
+   ═══════════════════════════════════════════ */
+
+:root{
+  --bg:#07090f;--bg2:#0d1117;--surface:#111827;--surface2:#1a2335;--surface3:#1f2d42;
+  --border:#1e2d42;--border2:#243346;--text:#f0f4ff;--muted:#8899bb;--dim:#445577;
+  --blue:#4f8ef7;--blue2:#3b7ef6;--purple:#9b6cf7;--cyan:#22d3ee;--green:#10b981;
+  --red:#ef4444;--yellow:#f59e0b;--indigo:#6366f1;
+  --r1:#ff4d6d;--r2:#ff6b6b;--g1:#06d6a0;--g2:#10b981;--y1:#ffd166;--y2:#f59e0b;--p1:#7c6cf7;--p2:#6366f1;
+  --glow-blue:0 0 30px rgba(79,142,247,0.15);--glow-purple:0 0 30px rgba(155,108,247,0.15);
+  --radius:16px;--radius-sm:10px;--radius-xs:8px;
+  --transition:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+[data-theme="light"]{
+  --bg:#f0f2f7;--bg2:#ffffff;--surface:#ffffff;--surface2:#f5f7fa;--surface3:#eef0f5;
+  --border:#d0d5e3;--border2:#c0c8d8;--text:#1a1f36;--muted:#5a6278;--dim:#8a92a8;
+  --blue:#3b7ef6;--blue2:#2563eb;--purple:#7c3aed;--cyan:#0891b2;--green:#059669;
+  --red:#dc2626;--yellow:#d97706;--indigo:#4f46e5;
+  --r1:#e11d48;--r2:#f43f5e;--g1:#059669;--g2:#10b981;--y1:#d97706;--y2:#f59e0b;--p1:#7c3aed;--p2:#6366f1;
+}
+
+[data-theme="ocean"]{
+  --bg:#0a1628;--bg2:#0d1d33;--surface:#102a45;--surface2:#153555;--surface3:#1a4065;
+  --border:#1e4a75;--border2:#245585;--text:#e8f4fc;--muted:#7ab8d9;--dim:#4a8ab5;
+  --blue:#38bdf8;--blue2:#0ea5e9;--purple:#a78bfa;--cyan:#22d3ee;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--indigo:#818cf8;
+  --r1:#f87171;--r2:#fb923c;--g1:#34d399;--g2:#10b981;--y1:#fbbf24;--y2:#f59e0b;--p1:#a78bfa;--p2:#818cf8;
+}
+
+[data-theme="forest"]{
+  --bg:#0a1f14;--bg2:#0d2818;--surface:#10301c;--surface2:#153d24;--surface3:#1a4a2c;
+  --border:#1e5534;--border2:#24603c;--text:#e8fcf0;--muted:#7ad99a;--dim:#4ab56e;
+  --blue:#34d399;--blue2:#10b981;--purple:#a78bfa;--cyan:#22d3ee;--green:#4ade80;
+  --red:#f87171;--yellow:#fbbf24;--indigo:#818cf8;
+  --r1:#f87171;--r2:#fb923c;--g1:#4ade80;--g2:#22c55e;--y1:#fbbf24;--y2:#f59e0b;--p1:#a78bfa;--p2:#818cf8;
+}
+
+[data-theme="sunset"]{
+  --bg:#1f0a10;--bg2:#2a0d15;--surface:#35121a;--surface2:#421620;--surface3:#501a28;
+  --border:#5a1e30;--border2:#682236;--text:#fce8ec;--muted:#d97a8a;--dim:#b54a5e;
+  --blue:#f472b6;--blue2:#ec4899;--purple:#c084fc;--cyan:#22d3ee;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--indigo:#a78bfa;
+  --r1:#f87171;--r2:#fb923c;--g1:#34d399;--g2:#10b981;--y1:#fbbf24;--y2:#f59e0b;--p1:#c084fc;--p2:#a78bfa;
+}
+
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--dim)}

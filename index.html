@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>مصفوفة أيزنهاور</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/auth.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/profile.css">
+</head>
+<body data-theme="dark">
+
+<div id="particles"></div>
+<div class="auth-bg-glow glow-1"></div>
+<div class="auth-bg-glow glow-2"></div>
+
+<!-- ════════════ AUTH SCREEN ════════════ -->
+<div id="auth-screen">
+<div class="auth-card">
+  <div class="auth-logo">
+    <span class="logo-icon">🎯</span>
+    <h1>مصفوفة أيزنهاور</h1>
+    <p>نظّم وقتك — ركّز على ما يُحدث فرقًا حقيقيًا</p>
+  </div>
+  <div class="auth-tabs">
+    <div class="auth-tab active" onclick="switchTab('login')">تسجيل الدخول</div>
+    <div class="auth-tab" onclick="switchTab('register')">حساب جديد</div>
+  </div>
+  <div id="login-form" class="auth-form">
+    <div class="form-group">
+      <label>اسم المستخدم</label>
+      <div class="input-wrap">
+        <input type="text" id="login-u" placeholder="username" autocomplete="username"/>
+        <span class="input-icon">👤</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <div class="input-wrap">
+        <input type="password" id="login-p" placeholder="••••••••" autocomplete="current-password"/>
+        <span class="input-icon">🔒</span>
+      </div>
+    </div>
+    <div class="auth-msg auth-error" id="login-err"></div>
+    <button class="btn-primary" onclick="login()">دخول ←</button>
+  </div>
+  <div id="register-form" class="auth-form" style="display:none">
+    <div class="form-group">
+      <label>الاسم الكامل</label>
+      <div class="input-wrap">
+        <input type="text" id="reg-name" placeholder="مثال: محمد أحمد"/>
+        <span class="input-icon">✨</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>اسم المستخدم</label>
+      <div class="input-wrap">
+        <input type="text" id="reg-u" placeholder="حروف + أرقام فقط"/>
+        <span class="input-icon">👤</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <div class="input-wrap">
+        <input type="password" id="reg-p" placeholder="6 أحرف على الأقل" autocomplete="new-password"/>
+        <span class="input-icon">🔒</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>تأكيد كلمة المرور</label>
+      <div class="input-wrap">
+        <input type="password" id="reg-c" placeholder="أعد كتابة كلمة المرور" autocomplete="new-password"/>
+        <span class="input-icon">🔒</span>
+      </div>
+    </div>
+    <div class="auth-msg auth-error" id="reg-err"></div>
+    <div class="auth-msg auth-success" id="reg-ok"></div>
+    <button class="btn-primary" onclick="register()">إنشاء الحساب ←</button>
+  </div>
+</div>
+</div>
+
+<!-- ════════════ APP SCREEN ════════════ -->
+<div id="app-screen">
+
+<!-- MOTIVATION BAR -->
+<div class="motivation-bar" id="motivationBar">
+  <span class="motivation-icon">💪</span>
+  <div class="motivation-text" id="motivationText">
+    <span>"النجاح ليس نهائيًا، والفشل ليس قاتلًا — الجرأة على الاستمرار هي ما يهم."</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-brand-icon">🎯</span>
+    <span class="nav-brand-text">مصفوفة أيزنهاور</span>
+  </div>
+  <div class="nav-center">
+    <div class="nav-stat">
+      <span>✅</span>
+      <span class="nav-stat-num" id="nav-done">0</span>
+      <span class="nav-stat-sep">/</span>
+      <span class="nav-stat-num" id="nav-total">0</span>
+      <span style="color:var(--dim)">مهمة</span>
+    </div>
+    <div class="nav-stat">
+      <span>📈</span>
+      <span class="nav-stat-num" id="nav-pct">0%</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="btn-logout" onclick="openReports()" title="التقارير">📊</button>
+    <div class="user-pill" onclick="openProfile()">
+      <div class="avatar" id="nav-avatar">؟</div>
+      <div class="user-info">
+        <div class="user-name" id="nav-uname">—</div>
+        <div class="user-sub">مستخدم نشط</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()">⎋ خروج</button>
+  </div>
+</nav>
+
+<main>
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card" onclick="openReports()">
+    <div class="stat-icon blue">📋</div>
+    <div class="stat-body"><div class="stat-num blue" id="s-total">0</div><div class="stat-label">إجمالي المهام</div></div>
+  </div>
+  <div class="stat-card" onclick="openReports()">
+    <div class="stat-icon green">✅</div>
+    <div class="stat-body"><div class="stat-num green" id="s-done">0</div><div class="stat-label">مكتملة</div></div>
+  </div>
+  <div class="stat-card" onclick="openReports()">
+    <div class="stat-icon yellow">⏳</div>
+    <div class="stat-body"><div class="stat-num yellow" id="s-pend">0</div><div class="stat-label">معلّقة</div></div>
+  </div>
+  <div class="stat-card" onclick="openReports()">
+    <div class="stat-icon purple">📈</div>
+    <div class="stat-body"><div class="stat-num purple" id="s-pct">0%</div><div class="stat-label">نسبة الإنجاز</div></div>
+  </div>
+</div>
+
+<!-- INPUT -->
+<div class="input-card">
+  <div class="task-input-wrap" style="position:relative">
+    <input type="text" id="taskInput" placeholder="✍️  اكتب مهمتك هنا..."/>
+    <div class="emoji-picker" id="emojiPicker"></div>
+  </div>
+  <button class="emoji-btn" onclick="toggleEmojiPicker()" title="إيموجي">😊</button>
+  <div class="select-wrap">
+    <select id="qSelect">
+      <option value="q1">🔴 مهم وعاجل</option>
+      <option value="q2">🟢 مهم وغير عاجل</option>
+      <option value="q3">🟡 غير مهم وعاجل</option>
+      <option value="q4">⚫ غير مهم وغير عاجل</option>
+    </select>
+    <span class="select-arrow">▼</span>
+  </div>
+  <button class="btn-add" onclick="addTask()">
+    <span>+</span><span>إضافة مهمة</span>
+  </button>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="filter-pills">
+    <button class="filter-pill active" onclick="setFilter('all',this)">🗂 الكل</button>
+    <button class="filter-pill" onclick="setFilter('pending',this)">⏳ معلّقة</button>
+    <button class="filter-pill" onclick="setFilter('done',this)">✅ مكتملة</button>
+  </div>
+  <button class="filter-pill" onclick="clearDone()" style="color:#f87171;border-color:rgba(248,113,113,0.25)">
+    🗑 حذف المكتملة
+  </button>
+</div>
+
+<!-- AXIS -->
+<div class="axis-wrap">
+  <div class="axis-label">⚡ عاجل</div>
+  <div class="axis-label">🕐 غير عاجل</div>
+</div>
+
+<!-- MATRIX -->
+<div class="matrix">
+  <div class="quadrant q1">
+    <div class="q-header">
+      <div class="q-icon-wrap">🔴</div>
+      <div class="q-info"><div class="q-title">افعله الآن</div><div class="q-sub">مهم + عاجل — أولوية قصوى</div></div>
+      <div class="q-badge" id="badge-q1">0</div>
+    </div>
+    <div class="q-progress">
+      <div class="q-progress-track"><div class="q-progress-bar" id="prog-q1" style="width:0%"></div></div>
+      <div class="q-progress-text" id="prog-txt-q1">0 / 0 مكتمل</div>
+    </div>
+    <div class="tasks-list" id="list-q1">
+      <div class="empty-state"><div class="empty-icon">🔴</div><div class="empty-text">لا توجد مهام عاجلة ومهمة</div></div>
+    </div>
+  </div>
+  <div class="quadrant q2">
+    <div class="q-header">
+      <div class="q-icon-wrap">🟢</div>
+      <div class="q-info"><div class="q-title">جدوله</div><div class="q-sub">مهم + غير عاجل — بناء المستقبل</div></div>
+      <div class="q-badge" id="badge-q2">0</div>
+    </div>
+    <div class="q-progress">
+      <div class="q-progress-track"><div class="q-progress-bar" id="prog-q2" style="width:0%"></div></div>
+      <div class="q-progress-text" id="prog-txt-q2">0 / 0 مكتمل</div>
+    </div>
+    <div class="tasks-list" id="list-q2">
+      <div class="empty-state"><div class="empty-icon">🟢</div><div class="empty-text">لا توجد مهام للجدولة</div></div>
+    </div>
+  </div>
+  <div class="quadrant q3">
+    <div class="q-header">
+      <div class="q-icon-wrap">🟡</div>
+      <div class="q-info"><div class="q-title">فوّضه</div><div class="q-sub">غير مهم + عاجل — لا تفعله بنفسك</div></div>
+      <div class="q-badge" id="badge-q3">0</div>
+    </div>
+    <div class="q-progress">
+      <div class="q-progress-track"><div class="q-progress-bar" id="prog-q3" style="width:0%"></div></div>
+      <div class="q-progress-text" id="prog-txt-q3">0 / 0 مكتمل</div>
+    </div>
+    <div class="tasks-list" id="list-q3">
+      <div class="empty-state"><div class="empty-icon">🟡</div><div class="empty-text">لا توجد مهام للتفويض</div></div>
+    </div>
+  </div>
+  <div class="quadrant q4">
+    <div class="q-header">
+      <div class="q-icon-wrap">⚫</div>
+      <div class="q-info"><div class="q-title">احذفه</div><div class="q-sub">غير مهم + غير عاجل — مضيعة للوقت</div></div>
+      <div class="q-badge" id="badge-q4">0</div>
+    </div>
+    <div class="q-progress">
+      <div class="q-progress-track"><div class="q-progress-bar" id="prog-q4" style="width:0%"></div></div>
+      <div class="q-progress-text" id="prog-txt-q4">0 / 0 مكتمل</div>
+    </div>
+    <div class="tasks-list" id="list-q4">
+      <div class="empty-state"><div class="empty-icon">⚫</div><div class="empty-text">لا توجد مهام هنا — ممتاز!</div></div>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<!-- ════════════ PROFILE MODAL ════════════ -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ إدارة الحساب</div>
+      <button class="modal-close" onclick="closeModal('profileModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="profile-avatar-section">
+        <div class="profile-avatar" id="profileAvatar">
+          <span id="profileAvatarText">؟</span>
+          <img id="profileAvatarImg" style="display:none"/>
+        </div>
+        <label class="avatar-upload">
+          📷 تغيير الصورة
+          <input type="file" id="avatarInput" accept="image/*" onchange="uploadAvatar(event)">
+        </label>
+      </div>
+      <div class="auth-form" style="gap:12px">
+        <div class="form-group">
+          <label>الاسم الكامل</label>
+          <div class="input-wrap">
+            <input type="text" id="edit-name" placeholder="اسمك الكامل"/>
+            <span class="input-icon">✨</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>اسم المستخدم</label>
+          <div class="input-wrap">
+            <input type="text" id="edit-u" placeholder="username" disabled style="opacity:0.6"/>
+            <span class="input-icon">👤</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور الحالية</label>
+          <div class="input-wrap">
+            <input type="password" id="edit-old-p" placeholder="أدخل كلمة المرور الحالية"/>
+            <span class="input-icon">🔒</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور الجديدة (اختياري)</label>
+          <div class="input-wrap">
+            <input type="password" id="edit-new-p" placeholder="اتركها فارغة إذا لم ترد التغيير"/>
+            <span class="input-icon">🔒</span>
+          </div>
+        </div>
+        <div class="auth-msg auth-error" id="profile-err"></div>
+        <div class="auth-msg auth-success" id="profile-ok"></div>
+        <button class="btn-primary" onclick="saveProfile()">💾 حفظ التغييرات</button>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+      <div style="margin-bottom:16px">
+        <label style="font-size:0.82rem;color:var(--muted);font-weight:600;display:block;margin-bottom:10px">🎨 الثيم</label>
+        <div class="theme-grid">
+          <div class="theme-option active" onclick="setTheme('dark',this)">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#07090f,#1a2335)"></div>
+            <div class="theme-name">ليلي</div>
+          </div>
+          <div class="theme-option" onclick="setTheme('light',this)">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#f0f2f7,#ffffff)"></div>
+            <div class="theme-name">نهاري</div>
+          </div>
+          <div class="theme-option" onclick="setTheme('ocean',this)">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0a1628,#153555)"></div>
+            <div class="theme-name">محيطي</div>
+          </div>
+          <div class="theme-option" onclick="setTheme('forest',this)">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#0a1f14,#153d24)"></div>
+            <div class="theme-name">غابي</div>
+          </div>
+          <div class="theme-option" onclick="setTheme('sunset',this)">
+            <div class="theme-preview" style="background:linear-gradient(135deg,#1f0a10,#421620)"></div>
+            <div class="theme-name">غروب</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);width:100%" onclick="deleteAccount()">
+        🗑 حذف الحساب نهائيًا
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ REPORTS MODAL ════════════ -->
+<div class="modal-overlay" id="reportsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📊 تقارير الأداء</div>
+      <button class="modal-close" onclick="closeModal('reportsModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="reports-grid">
+        <div class="report-card"><div class="report-value" id="r-total" style="color:var(--blue)">0</div><div class="report-label">إجمالي المهام</div></div>
+        <div class="report-card"><div class="report-value" id="r-done" style="color:var(--green)">0</div><div class="report-label">مكتملة</div></div>
+        <div class="report-card"><div class="report-value" id="r-pend" style="color:var(--yellow)">0</div><div class="report-label">معلّقة</div></div>
+        <div class="report-card"><div class="report-value" id="r-pct" style="color:var(--purple)">0%</div><div class="report-label">نسبة الإنجاز</div></div>
+      </div>
+      <div class="report-chart">
+        <div style="font-size:0.85rem;font-weight:700;margin-bottom:14px">📈 توزيع المهام حسب الأولوية</div>
+        <div id="reportChart"></div>
+      </div>
+      <div class="report-chart">
+        <div style="font-size:0.85rem;font-weight:700;margin-bottom:14px">✅ معدل الإنجاز حسب الربع</div>
+        <div id="reportChartDone"></div>
+      </div>
+      <button class="btn-primary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px" onclick="downloadExcel()">
+        📥 تحميل التقرير (Excel)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SHARE MODAL ════════════ -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <div class="modal-title">📤 مشاركة المهام</div>
+      <button class="modal-close" onclick="closeModal('shareModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;text-align:center">
+        اختر الطريقة التي تريد مشاركة مهامك من خلالها
+      </div>
+      <div class="share-grid">
+        <button class="share-btn" onclick="shareTask('whatsapp')">
+          <span class="share-icon">💬</span><span class="share-name">واتساب</span>
+        </button>
+        <button class="share-btn" onclick="shareTask('telegram')">
+          <span class="share-icon">✈️</span><span class="share-name">تيليجرام</span>
+        </button>
+        <button class="share-btn" onclick="shareTask('twitter')">
+          <span class="share-icon">🐦</span><span class="share-name">تويتر</span>
+        </button>
+        <button class="share-btn" onclick="shareTask('link')">
+          <span class="share-icon">🔗</span><span class="share-name">رابط</span>
+        </button>
+        <button class="share-btn" onclick="shareTask('copy')">
+          <span class="share-icon">📋</span><span class="share-name">نسخ</span>
+        </button>
+      </div>
+      <div id="shareLinkContainer" style="display:none;margin-top:16px;gap:10px;">
+        <input id="shareLinkInput" type="text" readonly style="width:100%;padding:12px;border-radius:14px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);direction:ltr;text-align:left;" />
+        <button class="btn-primary" style="width:100%;margin-top:10px;" onclick="copyShareLink()">📋 نسخ الرابط</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══ MOTIVATION QUOTES ══ */
+const quotes=[
+  '"النجاح ليس نهائيًا، والفشل ليس قاتلًا — الجرأة على الاستمرار هي ما يهم."',
+  '"لا تنتظر الفرصة، اصنعها بنفسك."',
+  '"كل يوم هو فرصة جديدة لتصبح نسخة أفضل من نفسك."',
+  '"العقل القوي يخلق واقعًا قويًا."',
+  '"لا تستسلم أبدًا — أعظم إنجازاتك تنتظرك في نهاية الطريق."',
+  '"التحدي هو باب النمو، ادخله بشجاعة."',
+  '"أنت أقوى مما تعتقد، وأكثر قدرة مما تتخيل."',
+  '"الاستمرار هو السر — كل خطوة صغيرة تقربك من هدفك الكبير."',
+  '"لا تقل "لا أستطيع" قبل أن تجرب — المستحيل مجرد كلمة."',
+  '"التنظيم هو مفتاح النجاح — رتب أفكارك وسترتب حياتك."',
+  '"الوقت هو أثمن ما تملك — استثمره بحكمة."',
+  '"كل صباح هو بداية جديدة — ابدأها بإيجابية."',
+  '"لا تقارن نفسك بالآخرين — أنت في سباقك الخاص."',
+  '"الإنجاز يبدأ بقرار — قرر أن تبدأ الآن."',
+  '"الثقة بالنفس نصف الطريق إلى النجاح."'
+];
+let currentQuote=0;
+function rotateQuotes(){
+  currentQuote=(currentQuote+1)%quotes.length;
+  const el=document.getElementById('motivationText');
+  el.style.opacity='0';
+  setTimeout(()=>{
+    el.innerHTML='<span>'+quotes[currentQuote]+'</span>';
+    el.style.opacity='1';
+  },300);
+}
+setInterval(rotateQuotes,8000);
+
+/* ══ PARTICLES ══ */
+(function(){
+  const wrap=document.getElementById('particles');
+  const colors=['#4f8ef720','#9b6cf720','#22d3ee18','#10b98118'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const size=4+Math.random()*8;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${15+Math.random()*25}s;animation-delay:${Math.random()*20}s;`;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ══ EMOJI PICKER ══ */
+const emojis=['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','🤐','🤨','😐','😑','😶','😏','😒','🙄','😬','🤥','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥴','😵','🤯','🤠','🥳','😎','🤓','🧐','😕','😟','🙁','☹️','😮','😯','😲','😳','🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😡','😠','🤬','😈','👿','💀','☠️','💩','🤡','👹','👺','👻','👽','👾','🤖','😺','😸','😹','😻','😼','😽','🙀','😿','😾','🙈','🙉','🙊','💋','💌','💘','💝','💖','💗','💓','💞','💕','💟','❣️','💔','❤️','🧡','💛','💚','💙','💜','🤎','🖤','🤍','💯','💢','💥','💫','💦','💨','🕳️','💣','💬','👁️‍🗨️','🗨️','🗯️','💭','💤','👋','🤚','🖐️','✋','🖖','👌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦾','🦿','🦵','🦶','👂','🦻','👃','🧠','🦷','🦴','👀','👁️','👅','👄','👶','🧒','👦','👧','🧑','👱','👨','🧔','👩','🧓','👴','👵','🙍','🙎','🙅','🙆','💁','🙋','🧏','🙇','🤦','🤷','👮','🕵️','💂','🥷','👷','🤴','👸','👳','👲','🧕','🤵','👰','🤰','🤱','👼','🎅','🤶','🦸','🦹','🧙','🧚','🧛','🧜','🧝','🧞','🧟','💆','💇','🚶','🧍','🧎','🏃','💃','🕺','🕴️','👯','🧖','🧗','🤺','🏇','⛷️','🏂','🏌️','🏄','🚣','🏊','⛹️','🏋️','🚴','🚵','🤸','🤼','🤽','🤾','🤹','🧘','🛀','🛌','🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐽','🐸','🐵','🙈','🙉','🙊','🐒','🐔','🐧','🐦','🐤','🐣','🐥','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐞','🐜','🦟','🦗','🕷️','🕸️','🦂','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🐊','🐅','🐆','🦓','🦍','🦧','🐘','🦛','🦏','🐪','🐫','🦒','🦘','🐃','🐂','🐄','🐎','🐖','🐏','🐑','🦙','🐐','🦌','🐕','🐩','🦮','🐕‍🦺','🐈','🐈‍⬛','🐓','🦃','🦚','🦜','🦢','🦩','🕊️','🐇','🦝','🦨','🦡','🦦','🦥','🐁','🐀','🐿️','🦔','🐾','🐉','🐲','🌵','🎄','🌲','🌳','🌴','🌱','🌿','☘️','🍀','🎍','🎋','🍃','🍂','🍁','🍄','🐚','🌾','💐','🌷','🌹','🥀','🌺','🌸','🌼','🌻','🌞','🌝','🌛','🌜','🌚','🌕','🌖','🌗','🌘','🌑','🌒','🌓','🌔','🌙','🌎','🌍','🌏','🪐','💫','⭐','🌟','✨','⚡','🔥','💥','☄️','☀️','🌤️','⛅','🌥️','☁️','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌬️','💨','💧','💦','☔','☂️','🌊','🌫️','🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍈','🍒','🍑','🥭','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥬','🥒','🌶️','🌽','🥕','🧄','🧅','🥔','🍠','🥐','🥯','🍞','🥖','🥨','🧀','🥚','🍳','🧈','🥞','🧇','🥓','🥩','🍗','🍖','🦴','🌭','🍔','🍟','🍕','🥪','🥙','🧆','🌮','🌯','🥗','🥘','🥫','🍝','🍜','🍲','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🍥','🥠','🥮','🍢','🍡','🍧','🍨','🍦','🥧','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','🥜','🍯','🥛','☕','🍵','🧃','🥤','🍶','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🧉','🍾','🧊','🥄','🍴','🍽️','🥣','🥡','🥢','🧂','⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🪀','🏓','🏸','🏒','🏑','🥍','🏏','🥅','⛳','🪁','🏹','🎣','🤿','🥊','🥋','🎽','🛹','🛷','⛸️','🥌','🎿','⛷️','🏂','🪂','🏋️','🤼','🤽','🤾','🌋','🏗️','🏘️','🏚️','🏠','🏡','🏢','🏣','🏤','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏭','🏯','🏰','💒','🗼','🗽','⛪','🕌','🛕','🕍','⛩️','🕋','⛲','⛺','🌁','🌃','🏙️','🌄','🌅','🌆','🌇','🌉','♨️','🎠','🎡','🎢','💈','🎪','🚂','🚃','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚝','🚞','🚋','🚌','🚍','🚎','🚐','🚑','🚒','🚓','🚔','🚕','🚖','🚗','🚘','🚙','🛻','🚚','🚛','🚜','🏎️','🏍️','🛵','🦽','🦼','🛺','🚲','🛴','🛹','🛼','🚏','🛣️','🛤️','🛢️','⛽','🚨','🚥','🚦','🛑','🚧','⚓','⛵','🛶','🚤','🛳️','⛴️','🛥️','🚢','✈️','🛩️','🛫','🛬','🪂','💺','🚁','🚟','🚠','🚡','🛰️','🚀','🛸','🛎️','🧳','⌛','⏳','⌚','⏰','⏱️','⏲️','🕰️','🕛','🕧','🕐','🕜','🕑','🕝','🕒','🕞','🕓','🕟','🕔','🕠','🕕','🕡','🕖','🕢','🕗','🕣','🕘','🕤','🕙','🕥','🕚','🕦','🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘','🌙','🌚','🌛','🌜','🌡️','☀️','🌝','🌞','🪐','⭐','🌟','🌠','🌌','☁️','⛅','⛈️','🌤️','🌥️','🌦️','🌧️','🌨️','🌩️','🌪️','🌫️','🌬️','🌀','🌈','🌂','☂️','☔','⛱️','⚡','❄️','☃️','⛄','☄️','🔥','💧','🌊','🎃','🎄','🎆','🎇','🧨','✨','🎈','🎉','🎊','🎋','🎍','🎎','🎏','🎐','🎑','🧧','🎀','🎁','🎗️','🎟️','🎫','🎖️','🏆','🏅','🥇','🥈','🥉','⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🪀','🏓','🏸','🏒','🏑','🥍','🏏','🥅','⛳','🪁','🏹','🎣','🤿','🥊','🥋','🎽','🛹','🛷','⛸️','🥌','🎿','⛷️','🏂','🪂','🏋️','🤼','🤽','🤾','🌋','🏗️','🏘️','🏚️','🏠','🏡','🏢','🏣','🏤','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏭','🏯','🏰','💒','🗼','🗽','⛪','🕌','🛕','🕍','⛩️','🕋','⛲','⛺','🌁','🌃','🏙️','🌄','🌅','🌆','🌇','🌉','♨️','🎠','🎡','🎢','💈','🎪','🚂','🚃','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚝','🚞','🚋','🚌','🚍','🚎','🚐','🚑','🚒','🚓','🚔','🚕','🚖','🚗','🚘','🚙','🛻','🚚','🚛','🚜','🏎️','🏍️','🛵','🦽','🦼','🛺','🚲','🛴','🛹','🛼','🚏','🛣️','🛤️','🛢️','⛽','🚨','🚥','🚦','🛑','🚧','⚓','⛵','🛶','🚤','🛳️','⛴️','🛥️','🚢','✈️','🛩️','🛫','🛬','🪂','💺','🚁','🚟','🚠','🚡','🛰️','🚀','🛸','🛎️','🧳','⌛','⏳','⌚','⏰','⏱️','⏲️','🕰️','🕛','🕧','🕐','🕜','🕑','🕝','🕒','🕞','🕓','🕟','🕔','🕠','🕕','🕡','🕖','🕢','🕗','🕣','🕘','🕤','🕙','🕥','🕚','🕦','🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘','🌙','🌚','🌛','🌜','🌡️','☀️','🌝','🌞','🪐','⭐','🌟','🌠','🌌','☁️','⛅','⛈️','🌤️','🌥️','🌦️','🌧️','🌨️','🌩️','🌪️','🌫️','🌬️','🌀','🌈','🌂','☂️','☔','⛱️','⚡','❄️','☃️','⛄','☄️','🔥','💧','🌊'];
+
+function initEmojiPicker(){
+  const picker=document.getElementById('emojiPicker');
+  picker.innerHTML='';
+  emojis.slice(0,128).forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emoji-item';
+    btn.textContent=e;
+    btn.onclick=()=>{insertEmoji(e);picker.classList.remove('show');};
+    picker.appendChild(btn);
+  });
+}
+function toggleEmojiPicker(){
+  document.getElementById('emojiPicker').classList.toggle('show');
+}
+function insertEmoji(emoji){
+  const inp=document.getElementById('taskInput');
+  const start=inp.selectionStart;
+  const end=inp.selectionEnd;
+  const val=inp.value;
+  inp.value=val.substring(0,start)+emoji+val.substring(end);
+  inp.focus();
+  inp.setSelectionRange(start+emoji.length,start+emoji.length);
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.task-input-wrap')&&!e.target.closest('.emoji-btn')){
+    document.getElementById('emojiPicker').classList.remove('show');
+  }
+});
+
+/* ══ DATA ══ */
+const DB={
+  users:()=>JSON.parse(localStorage.getItem('ei_users')||'{}'),
+  saveUsers:u=>localStorage.setItem('ei_users',JSON.stringify(u)),
+  session:()=>localStorage.getItem('ei_sess')||null,
+  setSession:u=>localStorage.setItem('ei_sess',u),
+  clearSession:()=>localStorage.removeItem('ei_sess'),
+  tasks:u=>JSON.parse(localStorage.getItem('ei_t_'+u)||'[]'),
+  saveTasks:(u,t)=>localStorage.setItem('ei_t_'+u,JSON.stringify(t)),
+  theme:()=>localStorage.getItem('ei_theme')||'dark',
+  saveTheme:t=>localStorage.setItem('ei_theme',t),
+};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const timeAgo=ts=>{
+  const m=Math.floor((Date.now()-ts)/60000);
+  if(m<1)return'الآن';if(m<60)return`${m} دقيقة`;
+  const h=Math.floor(m/60);
+  if(h<24)return`${h} ساعة`;
+  return`${Math.floor(h/24)} يوم`;
+};
+
+/* ══ STATE ══ */
+let user=null,tasks=[],filter='all',shareTaskId=null;
+
+/* ══ AUTH TAB ══ */
+function switchTab(t){
+  document.querySelectorAll('.auth-tab').forEach((el,i)=>
+    el.classList.toggle('active',t==='login'?i===0:i===1));
+  document.getElementById('login-form').style.display=t==='login'?'flex':'none';
+  document.getElementById('register-form').style.display=t!=='login'?'flex':'none';
+  clearMsgs();
+}
+function clearMsgs(){
+  ['login-err','reg-err','reg-ok','profile-err','profile-ok'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.display='none';el.textContent='';}
+  });
+}
+function showErr(id,msg){
+  const el=document.getElementById(id);
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+function showOk(id,msg){
+  const el=document.getElementById(id);
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+
+/* ══ REGISTER ══ */
+function register(){
+  clearMsgs();
+  const name=document.getElementById('reg-name').value.trim();
+  const uname=document.getElementById('reg-u').value.trim().toLowerCase();
+  const pass=document.getElementById('reg-p').value;
+  const conf=document.getElementById('reg-c').value;
+  if(!name) return showErr('reg-err','الرجاء إدخال اسمك الكامل');
+  if(!uname||!/^[a-z0-9_]+$/.test(uname)) return showErr('reg-err','اسم المستخدم: حروف إنجليزية وأرقام فقط');
+  if(pass.length<6) return showErr('reg-err','كلمة المرور 6 أحرف على الأقل');
+  if(pass!==conf) return showErr('reg-err','كلمتا المرور غير متطابقتين');
+  const users=DB.users();
+  if(users[uname]) return showErr('reg-err','اسم المستخدم مستخدم بالفعل');
+  users[uname]={name,uname,pass,created:Date.now(),avatar:''};
+  DB.saveUsers(users);
+  showOk('reg-ok','✅ تم إنشاء حسابك! سيتم تحويلك...');
+  setTimeout(()=>switchTab('login'),1600);
+}
+
+/* ══ LOGIN ══ */
+function login(){
+  clearMsgs();
+  const uname=document.getElementById('login-u').value.trim().toLowerCase();
+  const pass=document.getElementById('login-p').value;
+  if(!uname||!pass) return showErr('login-err','أدخل اسم المستخدم وكلمة المرور');
+  const users=DB.users();
+  if(!users[uname]||users[uname].pass!==pass)
+    return showErr('login-err','اسم المستخدم أو كلمة المرور غير صحيحة');
+  DB.setSession(uname);
+  startApp(users[uname]);
+}
+
+/* ══ LOGOUT ══ */
+function logout(){
+  DB.clearSession();user=null;tasks=[];
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('login-u').value='';
+  document.getElementById('login-p').value='';
+  clearMsgs();
+}
+
+/* ══ START APP ══ */
+function startApp(u){
+  user=u;tasks=DB.tasks(u.uname);
+  updateAvatar(u);
+  document.getElementById('nav-uname').textContent=u.name;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  const savedTheme=DB.theme();
+  document.body.setAttribute('data-theme',savedTheme);
+  initEmojiPicker();
+  render();
+}
+
+function updateAvatar(u){
+  const navAva=document.getElementById('nav-avatar');
+  if(u.avatar){
+    navAva.innerHTML=`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">`;
+  }else{
+    navAva.textContent=u.name[0].toUpperCase();
+  }
+}
+
+/* ══ FILTER ══ */
+function setFilter(f,btn){
+  filter=f;
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+/* ══ CLEAR DONE ══ */
+function clearDone(){
+  if(!tasks.filter(t=>t.done).length) return;
+  if(confirm('حذف جميع المهام المكتملة؟')){
+    tasks=tasks.filter(t=>!t.done);
+    DB.saveTasks(user.uname,tasks);render();
+  }
+}
+
+/* ══ ADD TASK ══ */
+function addTask(){
+  const inp=document.getElementById('taskInput');
+  const text=inp.value.trim();
+  if(!text){inp.focus();return;}
+  const q=document.getElementById('qSelect').value;
+  tasks.push({id:Date.now().toString(),text,q,done:false,ts:Date.now()});
+  DB.saveTasks(user.uname,tasks);
+  render();inp.value='';inp.focus();
+}
+
+/* ══ TOGGLE / DELETE ══ */
+function toggleDone(id){
+  const t=tasks.find(t=>t.id===id);
+  if(t){t.done=!t.done;DB.saveTasks(user.uname,tasks);render();}
+}
+function deleteTask(id){
+  tasks=tasks.filter(t=>t.id!==id);
+  DB.saveTasks(user.uname,tasks);render();
+}
+
+/* ══ SHARE ══ */
+function openShare(id){
+  shareTaskId=id;
+  const linkContainer=document.getElementById('shareLinkContainer');
+  if(linkContainer){linkContainer.style.display='none';}
+  const linkInput=document.getElementById('shareLinkInput');
+  if(linkInput){linkInput.value='';}
+  document.getElementById('shareModal').classList.add('show');
+}
+function buildShareUrl(t){
+  const base = window.location.protocol === 'file:'
+    ? window.location.href.split('?')[0]
+    : window.location.origin + window.location.pathname;
+  const payload = encodeURIComponent(JSON.stringify({text:t.text,q:t.q,done:t.done,ts:t.ts}));
+  return `${base}?shared=${payload}`;
+}
+function shareTask(platform){
+  const t=tasks.find(x=>x.id===shareTaskId);
+  if(!t) return;
+  const qLabels={q1:'🔴 مهم وعاجل',q2:'🟢 مهم وغير عاجل',q3:'🟡 غير مهم وعاجل',q4:'⚫ غير مهم وغير عاجل'};
+  const text=`📋 مهمة من مصفوفة أيزنهاور\n\n${t.text}\n\nالأولوية: ${qLabels[t.q]}\nالحالة: ${t.done?'✅ مكتملة':'⏳ معلّقة'}\n\n🎯 مصفوفة أيزنهاور - نظّم وقتك`;
+
+  if(platform==='whatsapp'){
+    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+  }else if(platform==='telegram'){
+    window.open('https://t.me/share/url?url=&text='+encodeURIComponent(text),'_blank');
+  }else if(platform==='twitter'){
+    window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank');
+  }else if(platform==='link'){
+    const url=buildShareUrl(t);
+    const input=document.getElementById('shareLinkInput');
+    const linkContainer=document.getElementById('shareLinkContainer');
+    if(input){input.value=url;input.select();}
+    if(linkContainer){linkContainer.style.display='flex';}
+    return;
+  }else if(platform==='copy'){
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('✅ تم نسخ المهمة!');
+    });
+  }
+  closeModal('shareModal');
+}
+function copyShareLink(){
+  const input=document.getElementById('shareLinkInput');
+  if(input && input.value){
+    navigator.clipboard.writeText(input.value).then(()=>{
+      alert('✅ تم نسخ الرابط!');
+    });
+  }
+}
+
+/* ══ PROFILE MODAL ══ */
+function openProfile(){
+  if(!user) return;
+  document.getElementById('edit-name').value=user.name;
+  document.getElementById('edit-u').value=user.uname;
+  document.getElementById('edit-old-p').value='';
+  document.getElementById('edit-new-p').value='';
+  clearMsgs();
+
+  const pAva=document.getElementById('profileAvatar');
+  const pText=document.getElementById('profileAvatarText');
+  const pImg=document.getElementById('profileAvatarImg');
+  if(user.avatar){
+    pImg.src=user.avatar;pImg.style.display='block';
+    pText.style.display='none';
+  }else{
+    pImg.style.display='none';
+    pText.style.display='block';
+    pText.textContent=user.name[0].toUpperCase();
+  }
+
+  const savedTheme=DB.theme();
+  document.querySelectorAll('.theme-option').forEach(el=>el.classList.remove('active'));
+  const themeMap={'dark':0,'light':1,'ocean':2,'forest':3,'sunset':4};
+  const opts=document.querySelectorAll('.theme-option');
+  if(opts[themeMap[savedTheme]]) opts[themeMap[savedTheme]].classList.add('active');
+
+  document.getElementById('profileModal').classList.add('show');
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+}
+
+function uploadAvatar(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  if(file.size>2*1024*1024){alert('الصورة كبيرة جدًا! الحد الأقصى 2 ميجا');return;}
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const img=ev.target.result;
+    document.getElementById('profileAvatarImg').src=img;
+    document.getElementById('profileAvatarImg').style.display='block';
+    document.getElementById('profileAvatarText').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProfile(){
+  clearMsgs();
+  const name=document.getElementById('edit-name').value.trim();
+  const oldPass=document.getElementById('edit-old-p').value;
+  const newPass=document.getElementById('edit-new-p').value;
+  const pImg=document.getElementById('profileAvatarImg');
+
+  if(!name) return showErr('profile-err','الرجاء إدخال الاسم');
+  if(oldPass!==user.pass) return showErr('profile-err','كلمة المرور الحالية غير صحيحة');
+
+  const users=DB.users();
+  users[user.uname].name=name;
+  if(pImg.style.display!=='none'&&pImg.src) users[user.uname].avatar=pImg.src;
+  if(newPass){
+    if(newPass.length<6) return showErr('profile-err','كلمة المرور الجديدة 6 أحرف على الأقل');
+    users[user.uname].pass=newPass;
+  }
+  DB.saveUsers(users);
+  user=users[user.uname];
+  updateAvatar(user);
+  document.getElementById('nav-uname').textContent=name;
+  showOk('profile-ok','✅ تم حفظ التغييرات بنجاح!');
+  render();
+}
+
+function setTheme(theme,el){
+  document.body.setAttribute('data-theme',theme);
+  DB.saveTheme(theme);
+  document.querySelectorAll('.theme-option').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function deleteAccount(){
+  if(!confirm('⚠️ هل أنت متأكد من حذف حسابك نهائيًا؟ سيتم حذف جميع بياناتك ومهامك!')) return;
+  const users=DB.users();
+  delete users[user.uname];
+  DB.saveUsers(users);
+  localStorage.removeItem('ei_t_'+user.uname);
+  DB.clearSession();
+  logout();
+}
+
+/* ══ REPORTS ══ */
+function openReports(){
+  const total=tasks.length;
+  const done=tasks.filter(t=>t.done).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('r-total').textContent=total;
+  document.getElementById('r-done').textContent=done;
+  document.getElementById('r-pend').textContent=total-done;
+  document.getElementById('r-pct').textContent=pct+'%';
+
+  const qNames={q1:'🔴 افعله الآن',q2:'🟢 جدوله',q3:'🟡 فوّضه',q4:'⚫ احذفه'};
+  const qColors={q1:'linear-gradient(90deg,#ff4d6d,#ff6b6b)',q2:'linear-gradient(90deg,#06d6a0,#10b981)',q3:'linear-gradient(90deg,#ffd166,#f59e0b)',q4:'linear-gradient(90deg,#7c6cf7,#6366f1)'};
+
+  let chartHTML='';
+  ['q1','q2','q3','q4'].forEach(q=>{
+    const count=tasks.filter(t=>t.q===q).length;
+    const max=Math.max(1,total);
+    const w=Math.round(count/max*100);
+    chartHTML+=`<div class="chart-bar-wrap"><div class="chart-label">${qNames[q]}</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${w}%;background:${qColors[q]}"></div></div><div class="chart-bar-val">${count}</div></div>`;
+  });
+  document.getElementById('reportChart').innerHTML=chartHTML;
+
+  let doneHTML='';
+  ['q1','q2','q3','q4'].forEach(q=>{
+    const all=tasks.filter(t=>t.q===q);
+    const d=all.filter(t=>t.done).length;
+    const pct2=all.length?Math.round(d/all.length*100):0;
+    doneHTML+=`<div class="chart-bar-wrap"><div class="chart-label">${qNames[q]}</div><div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${pct2}%;background:${qColors[q]}"></div></div><div class="chart-bar-val">${pct2}%</div></div>`;
+  });
+  document.getElementById('reportChartDone').innerHTML=doneHTML;
+
+  document.getElementById('reportsModal').classList.add('show');
+}
+
+function downloadExcel(){
+  const qNames={q1:'مهم وعاجل (افعله الآن)',q2:'مهم وغير عاجل (جدوله)',q3:'غير مهم وعاجل (فوّضه)',q4:'غير مهم وغير عاجل (احذفه)'};
+  let csv='\uFEFF'; // BOM for Arabic
+  csv+='المهمة,الأولوية,الحالة,تاريخ الإضافة\n';
+  tasks.forEach(t=>{
+    const status=t.done?'مكتملة':'معلّقة';
+    const date=new Date(t.ts).toLocaleDateString('ar-SA');
+    csv+=`"${t.text}","${qNames[t.q]}","${status}","${date}"\n`;
+  });
+
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='تقرير_مصفوفة_أيزنهاور_'+new Date().toLocaleDateString('ar-SA')+'.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ══ RENDER ══ */
+function render(){
+  const vis=tasks.filter(t=>filter==='all'?true:filter==='done'?t.done:!t.done);
+  const byQ={q1:[],q2:[],q3:[],q4:[]};
+  vis.forEach(t=>byQ[t.q].push(t));
+
+  ['q1','q2','q3','q4'].forEach(q=>{
+    const list=document.getElementById('list-'+q);
+    const badge=document.getElementById('badge-'+q);
+    const prog=document.getElementById('prog-'+q);
+    const ptxt=document.getElementById('prog-txt-'+q);
+
+    const all=tasks.filter(t=>t.q===q);
+    const done=all.filter(t=>t.done).length;
+    const pct=all.length?Math.round(done/all.length*100):0;
+
+    badge.textContent=all.length;
+    prog.style.width=pct+'%';
+    ptxt.textContent=`${done} / ${all.length} مكتمل`;
+
+    if(!byQ[q].length){
+      const msgs={q1:'لا توجد مهام عاجلة ومهمة 🎉',q2:'لا توجد مهام للجدولة',q3:'لا توجد مهام للتفويض',q4:'لا توجد مهام هنا — ممتاز!'};
+      const icons={q1:'🔴',q2:'🟢',q3:'🟡',q4:'⚫'};
+      list.innerHTML=`<div class="empty-state"><div class="empty-icon">${icons[q]}</div><div class="empty-text">${msgs[q]}</div></div>`;
+      return;
+    }
+
+    list.innerHTML=byQ[q].map(t=>`
+      <div class="task-item ${t.done?'done':''}">
+        <div class="task-check" onclick="toggleDone('${t.id}')">${t.done?'✓':''}</div>
+        <div class="task-body">
+          <div class="task-text">${esc(t.text)}</div>
+          <div class="task-meta">
+            <span>⏱ ${timeAgo(t.ts)}</span>
+            ${t.done?'<div class="task-meta-dot"></div><span style="color:#10b981">✓ مكتملة</span>':''}
+          </div>
+        </div>
+        <div class="task-actions">
+          <button class="task-btn share-btn" onclick="openShare('${t.id}')" title="مشاركة">📤</button>
+          <button class="task-btn" onclick="deleteTask('${t.id}')" title="حذف">✕</button>
+        </div>
+      </div>
+    `).join('');
+  });
+
+  const total=tasks.length;
+  const done=tasks.filter(t=>t.done).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-pend').textContent=total-done;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('nav-done').textContent=done;
+  document.getElementById('nav-total').textContent=total;
+  document.getElementById('nav-pct').textContent=pct+'%';
+}
+
+/* ══ KEYBOARD ══ */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  const id=document.activeElement.id;
+  if(id==='taskInput')addTask();
+  if(id==='login-u'||id==='login-p')login();
+  if(id==='reg-c')register();
+});
+
+function parseSharedLink(){
+  const params=new URLSearchParams(window.location.search);
+  const shared=params.get('shared');
+  if(!shared) return;
+  try{
+    const data=decodeSharedLink(shared);
+    const qLabels={q1:'🔴 مهم وعاجل',q2:'🟢 مهم وغير عاجل',q3:'🟡 غير مهم وعاجل',q4:'⚫ غير مهم وغير عاجل'};
+    alert(`🔗 رابط مشاركة\n\n${data.text}\n\nالأولوية: ${qLabels[data.q]}\nالحالة: ${data.done?'✅ مكتملة':'⏳ معلّقة'}`);
+  }catch(e){console.warn('فشل فك رابط المشاركة',e);}
+}
+
+/* ══ AUTO LOGIN ══ */
+(function(){
+  parseSharedLink();
+  initEmojiPicker();
+  const sess=DB.session();
+  if(sess){const u=DB.users()[sess];if(u){startApp(u);return;}}
+  document.getElementById('auth-screen').style.display='flex';
+})();
+</script>
+
+
+</body>
+</html>

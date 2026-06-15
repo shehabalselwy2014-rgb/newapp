@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════
+   Eisenhower Matrix Pro — Auth Screen
+   ═══════════════════════════════════════════ */
+
+#auth-screen{
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+
+.auth-bg-glow{
+  position:fixed;width:600px;height:600px;border-radius:50%;
+  filter:blur(120px);pointer-events:none;z-index:0;
+}
+.glow-1{background:rgba(79,142,247,0.08);top:-100px;right:-100px;}
+.glow-2{background:rgba(155,108,247,0.08);bottom:-100px;left:-100px;}
+
+.auth-card{
+  position:relative;z-index:1;
+  background:var(--surface);border-radius:24px;
+  padding:44px 40px;width:100%;max-width:440px;
+  border:1px solid var(--border2);
+  box-shadow:0 32px 80px rgba(0,0,0,0.6),var(--glow-blue);
+  backdrop-filter:blur(20px);
+  animation:cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(30px) scale(0.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.auth-logo{text-align:center;margin-bottom:32px}
+.logo-icon{font-size:3rem;margin-bottom:12px;display:block;animation:pulse 3s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.auth-logo h1{
+  font-size:1.7rem;font-weight:900;
+  background:linear-gradient(135deg,#60a5fa,#a78bfa,#60a5fa);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.auth-logo p{color:var(--muted);font-size:0.9rem;margin-top:6px;font-weight:300}
+
+.auth-tabs{
+  display:flex;background:var(--bg2);border-radius:12px;padding:4px;
+  margin-bottom:28px;gap:4px;border:1px solid var(--border);
+}
+.auth-tab{
+  flex:1;text-align:center;padding:11px;border-radius:9px;cursor:pointer;
+  font-size:0.9rem;font-weight:500;color:var(--muted);transition:var(--transition);
+  font-family:'Tajawal',sans-serif;
+}
+.auth-tab.active{
+  background:linear-gradient(135deg,var(--blue2),var(--purple));
+  color:#fff;font-weight:700;box-shadow:0 4px 15px rgba(79,142,247,0.35);
+}
+
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:0.82rem;color:var(--muted);font-weight:600;letter-spacing:0.03em}
+.input-wrap{position:relative}
+.input-icon{
+  position:absolute;top:50%;transform:translateY(-50%);right:14px;
+  font-size:1rem;pointer-events:none;color:var(--dim);transition:var(--transition);
+}
+.form-group input{
+  width:100%;padding:12px 40px 12px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border2);background:var(--bg2);color:var(--text);
+  font-size:0.95rem;font-family:'Tajawal',sans-serif;outline:none;transition:var(--transition);
+}
+.form-group input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,142,247,0.12);background:var(--bg)}
+.form-group input:focus + .input-icon{color:var(--blue)}
+.form-group input::placeholder{color:var(--dim)}
+
+.auth-msg{border-radius:var(--radius-xs);padding:11px 14px;font-size:0.85rem;display:none;animation:fadeIn 0.2s ease;}
+.auth-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#fca5a5}
+.auth-success{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+.btn-primary{
+  padding:14px;border-radius:var(--radius-sm);border:none;
+  background:linear-gradient(135deg,var(--blue2),var(--purple));
+  color:#fff;font-size:1rem;font-family:'Tajawal',sans-serif;font-weight:700;
+  cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(79,142,247,0.3);
+}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:var(--transition);}
+.btn-primary:hover::before{opacity:1}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(79,142,247,0.4)}
+.btn-primary:active{transform:translateY(0)}
+
+@media(max-width:400px){
+  .auth-card{padding:28px 20px}
+}
